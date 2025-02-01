@@ -49,7 +49,7 @@ class DuckDBPipeline:
             col_name = field.get("name")
             if not col_name:
                 raise ValueError("Cada campo deve ter um 'name' definido.")
-            # Se não informado, define como VARCHAR (padrão)
+           
             data_type = field.get("data_type", "").strip() or "VARCHAR"
             col_def = f"{col_name} {data_type}"
             schema_for_metadata[col_name] = {"data_type": data_type}
@@ -87,18 +87,18 @@ class DuckDBPipeline:
         primary_keys = [col for col, info in metadata.items() if info.get("primary_key")]
 
         if primary_keys:
-            # Se 'id' é a chave primária e não foi fornecido, auto-incrementa
+            
             if "id" in primary_keys and "id" not in data:
                 max_id = self.conn.execute(f"SELECT COALESCE(MAX(id), 0) FROM {table_name};").fetchone()[0]
                 data["id"] = max_id + 1
             else:
-                # Se os valores das chaves primárias não foram fornecidos, avisa o usuário
+                
                 for pk in primary_keys:
                     if pk not in data:
                         st.error(f"O valor para a chave primária '{pk}' não foi fornecido.")
                         return
 
-            # Verifica duplicação da chave primária
+            
             pk_conditions = " AND ".join([f"{pk} = ?" for pk in primary_keys])
             pk_values = tuple(data[pk] for pk in primary_keys)
             exists = self.conn.execute(
@@ -164,7 +164,7 @@ class DuckDBPipeline:
     def close(self):
         self.conn.close()
 
-# Instancia global do pipeline
+
 pipeline = DuckDBPipeline(str(full_duckdb_path))
 
 # ========= Interface Streamlit =========
@@ -219,7 +219,7 @@ if operation == "Criar Tabela":
             except Exception as e:
                 st.error(f"Erro: {e}")
     
-    else:  # Modo Colar JSON
+    else:  # JSON
         st.subheader("Cole o schema JSON")
         json_schema = st.text_area("Schema JSON (deve ser uma lista de campos)", height=200)
         if st.button("Criar Tabela (JSON)"):
