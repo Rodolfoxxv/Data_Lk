@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Id_p",
+        "data_type": "INTEGER",
+        "primary_key": true
+    },
+    {
+        "name": "Nome",
+        "data_type": "VARCHAR"
+    },
+    {
+        "name": "Telefone",
+        "data_type": "VARCHAR"
+    },
+    {
+        "name": "Data_Cadastro",
+        "data_type": "TIMESTAMP"
+    },
+    {
+        "name": "Cliente_Id",
+        "data_type": "INTEGER",
+        "foreign_key": {
+            "table": "clientes",
+            "column": "id"
+        }
+    }
+]
